@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Embedding Vega-Lite</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
+  </head>
+  <body>
+    <div id="trellis"></div>
+    <div id="heatmap"></div>
+
+    <script type="text/javascript">
+      var heatmapSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/2021-05-18-16-55-43/data.json"},
+        "transform": [
+          {"filter": "datum.dataset == 'spaces'"}
+        ],
+        "facet": {
+          "column": {
+          "field": "metric",
+          "type": "nominal"
+          }
+        },
+        "resolve":{
+          "scale":{
+            "color":"independent"
+          }
+        },
+        "spec": {
+          "mark": {"type": "rect", "tooltip": {"content": "data"}},
+          "encoding": {
+            "x": {"field": "method", "type":"nominal"},
+            "color": {"field": "value", "type": "quantitative", "scale": {}},
+            "y": {"field": "pair", "type": "ordinal"}
+          }
+        }
+      };
+
+      var trellisSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/2021-05-18-16-55-43/data.json"},
+        "transform": [
+          {"filter": "datum.dataset == 'spaces'"}
+        ],
+        "facet": {
+          "column": {
+          "field": "metric",
+          "type": "nominal"
+          }
+        },
+        "resolve":{
+          "scale":{
+            "x": "independent"
+          }
+        },
+        "spec": {
+          "mark": {"type": "point", "tooltip": {"content": "data"}},
+          "encoding": {
+            "color": {"field": "method", "type":"nominal"},
+            "x": {"field": "value", "type": "quantitative", "scale": {}},
+            "y": {"field": "pair", "type": "ordinal"}
+          }
+        }
+      };
+      vegaEmbed('#heatmap', heatmapSpec);
+      vegaEmbed('#trellis', trellisSpec);
+    </script>
+  </body>
+</html>
