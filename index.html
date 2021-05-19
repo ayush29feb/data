@@ -14,13 +14,14 @@
       var heatmapSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/2021-05-18-16-55-43/data.json"},
-        "transform": [
-          {"filter": "datum.dataset == 'spaces'"}
-        ],
         "facet": {
           "column": {
-          "field": "metric",
-          "type": "nominal"
+            "field": "metric",
+            "type": "nominal"
+          },
+          "row": {
+            "field": "dataset",
+            "type": "nominal"
           }
         },
         "resolve":{
@@ -41,13 +42,14 @@
       var trellisSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/2021-05-18-16-55-43/data.json"},
-        "transform": [
-          {"filter": "datum.dataset == 'spaces'"}
-        ],
         "facet": {
           "column": {
-          "field": "metric",
-          "type": "nominal"
+            "field": "metric",
+            "type": "nominal"
+          },
+          "row": {
+            "field": "dataset",
+            "type": "nominal"
           }
         },
         "resolve":{
