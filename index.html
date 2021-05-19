@@ -7,10 +7,47 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
   </head>
   <body>
+    <div id="percentile"></div>
     <div id="trellis"></div>
     <div id="heatmap"></div>
 
     <script type="text/javascript">
+      var percentileSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {
+          "url": "https://raw.githubusercontent.com/ayush29feb/data/master/2021-05-18-16-55-43/data.json"
+        },
+        "transform": [
+          {
+            "window": [{
+              "op": "count",
+              "field": "value",
+              "as": "count_value"
+            }],
+            "sort": [{"field": "value", "order": "ascending"}],
+            "groupby": ["dataset", "metric", "method"],
+            "ignorePeers": false,
+            "frame": [null, 0]
+          }
+        ],
+        "resolve":{
+          "scale":{
+            "y":"independent"
+          }
+        },
+        "facet": {
+          "row": {"field": "dataset"},
+          "column": {"field": "metric"}
+        },
+        "spec": {
+          "mark": {"type": "line", "tooltip": {"content": "data"}},
+          "encoding": {
+            "color": {"field": "method", "type": "nominal"},
+            "y": {"field": "value", "type": "quantitative"},
+            "x": {"field": "count_value", "type": "quantitative"}
+          }
+        }
+      };
       var heatmapSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/2021-05-18-16-55-43/data.json"},
@@ -66,6 +103,7 @@
           }
         }
       };
+      vegaEmbed('#percentile', percentileSpec);
       vegaEmbed('#heatmap', heatmapSpec);
       vegaEmbed('#trellis', trellisSpec);
     </script>
