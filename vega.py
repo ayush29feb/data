@@ -21,7 +21,8 @@ def load_metrics(path, agg="median"):
                     "dataset": dataset,
                     "method": method,
                     "pair": pair,
-                    m: v
+                    "metric": m,
+                    "value": v
                 })
     return data
 
