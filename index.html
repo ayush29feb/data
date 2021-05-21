@@ -128,6 +128,105 @@
         }
       };
 
+
+      var percentileAggSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {
+          "url": url
+        },
+        "hconcat": [{
+          "transform": transform.concat([
+            {"filter": "datum.metric == 'lpips'"},
+            {
+              "window": [{
+                "op": "count",
+                "field": "value",
+                "as": "count_value"
+              }],
+              "sort": [{"field": "value", "order": "descending"}],
+              "groupby": ["dataset", "key", "Metric"],
+              "ignorePeers": false,
+              "frame": [null, 0]
+            },
+            {
+              "window": [{
+                "op": "mean",
+                "field": "value",
+                "as": "agg_value"
+              }],
+              "sort": [{"field": "value", "order": "descending"}],
+              "groupby": ["dataset", "key", "Metric"],
+              "ignorePeers": false,
+              "frame": [null, 0]
+            }
+          ]),
+          "resolve":{
+            "scale":{
+              "y":"independent",
+              "x": "independent"
+            }
+          },
+          "facet": {
+            "row": {"field": "dataset", "title": "Dataset"},
+            "column": {"field": "Metric"}
+          },
+          "spec": {
+          "mark": {"type": "line", "tooltip": {"content": "data"}},
+          "encoding": {
+            "color": {"field": "method", "type": "nominal", "title": "Method"},
+            "y": {"field": "agg_value", "type": "quantitative", "title": "Aggregate Mean", "scale": {"zero": false}},
+            "x": {"field": "count_value", "type": "quantitative", "title": "#samples"}
+          }
+        }
+        }, {
+          "transform": transform.concat([
+            {"filter": {"field": "metric", "oneOf": ["psnr_masked", "ssim"]}},
+            {
+              "window": [{
+                "op": "count",
+                "field": "value",
+                "as": "count_value"
+              }],
+              "sort": [{"field": "value", "order": "ascending"}],
+              "groupby": ["dataset", "key", "Metric"],
+              "ignorePeers": false,
+              "frame": [null, 0]
+            },
+            {
+              "window": [{
+                "op": "mean",
+                "field": "value",
+                "as": "agg_value"
+              }],
+              "sort": [{"field": "value", "order": "ascending"}],
+              "groupby": ["dataset", "key", "Metric"],
+              "ignorePeers": false,
+              "frame": [null, 0]
+            }
+          ]),
+          "resolve":{
+            "scale":{
+              "y":"independent",
+              "x": "independent"
+            }
+          },
+          "facet": {
+            "row": {"field": "dataset", "title": null},
+            "column": {"field": "Metric"}
+          },
+          "spec": {
+          "mark": {"type": "line", "tooltip": {"content": "data"}},
+          "encoding": {
+            "color": {"field": "method", "type": "nominal", "title": "Method"},
+            "y": {"field": "agg_value", "type": "quantitative", "title": null, "scale": {"zero": false}},
+            "x": {"field": "count_value", "type": "quantitative", "title": "#samples"}
+          }
+        }
+        }]
+      };
+
+
+
       var trellisSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": { "url": url },
