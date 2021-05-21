@@ -87,6 +87,11 @@ def print_latex_table(data, table="eval"):
         datasets = ["spaces"]
         methods = [
             "ours_100k",
+            "ours_f268032071",
+            "ours_f274151488",
+            "ours_f274151551",
+            "ours_f274163133",
+            "ours_f274163161"
         ]
 
     top = {}
@@ -146,7 +151,17 @@ def print_latex_table(data, table="eval"):
         elif method == "ours_f274140566":
             print("Hourglass (f274140566)")
         elif method == "ours_f274140522":
-            print("Midas1 (f274140522)")
+            print("MiDaS1 (f274140522)")
+        elif method == "ours_f268032071":
+            print(method)
+        elif method == "ours_f274151488":
+            print(method)
+        elif method == "ours_f274151551":
+            print(method)
+        elif method == "ours_f274163133":
+            print(method)
+        elif method == "ours_f274163161":
+            print(method)
 
         s = f"   "
         for dataset in datasets:

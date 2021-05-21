@@ -19,6 +19,10 @@
       var url="https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/" + data + ".json"
       console.log(url);
       var method = ["gt_warp", "ours", "shih", "photo3d", "si_mpi", "synsin"];
+      var transform = [
+          {"fold": method},
+          {"calculate": "datum.key", "as": "method"},
+      ];
       if (data.startsWith("cnn")) {
         method = [
             "ours_100k",
@@ -28,15 +32,17 @@
             "ours_f274140566",
             "ours_f274140522",
         ]
+        transform = [
+          {"fold": method},
+          {"calculate": "{'ours_100k': 'MiDaS2', 'ours_f274140538': 'MiDaS0', 'ours_f274140594': 'U-Net', 'ours_f274140638': 'No Features', 'ours_f274140566': 'Hourglass', 'ours_f274140522': 'MiDaS1'}[datum.key]", "as": "method"},
+        ]
       }
       var barSpec =  {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {
           "url": url
         },
-        "transform": [
-          {"fold": method}
-        ],
+        "transform": transform,
         "resolve":{
           "scale":{
             "y":"independent"
@@ -50,8 +56,8 @@
           "mark": {"type": "bar", "tooltip": {"content": "data"}},
           "encoding": {
             "y": {"field": "value", "type": "quantitative", "title": null, "aggregate": "median"},
-            "x": {"field": "key", "type": "nominal", "title": "Method"},
-            "color": {"field": "key", "type": "nominal", "title": "Method"}
+            "x": {"field": "method", "type": "nominal", "title": null},
+            "color": {"field": "method", "type": "nominal", "title": "Method"}
           }
         }
       };
@@ -60,8 +66,7 @@
         "data": {
           "url": url
         },
-        "transform": [
-          {"fold": method},
+        "transform": transform.concat([
           {
             "window": [{
               "op": "count",
@@ -73,7 +78,7 @@
             "ignorePeers": false,
             "frame": [null, 0]
           }
-        ],
+        ]),
         "resolve":{
           "scale":{
             "y":"independent",
@@ -87,7 +92,7 @@
         "spec": {
           "mark": {"type": "line", "tooltip": {"content": "data"}},
           "encoding": {
-            "color": {"field": "key", "type": "nominal", "title": "Method"},
+            "color": {"field": "method", "type": "nominal", "title": "Method"},
             "y": {"field": "value", "type": "quantitative", "title": null},
             "x": {"field": "count_value", "type": "quantitative", "title": "#samples"}
           }
@@ -97,9 +102,7 @@
       var trellisSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": { "url": url },
-        "transform": [
-          {"fold": method}
-        ],
+        "transform": transform,
         "facet": {
           "column": {
             "field": "metric",
@@ -118,7 +121,7 @@
         "spec": {
           "mark": {"type": "circle", "tooltip": {"content": "data"}},
           "encoding": {
-            "color": {"field": "key", "type":"nominal"},
+            "color": {"field": "method", "type":"nominal"},
             "x": {"field": "value", "type": "quantitative", "scale": {}},
             "y": {"field": "pair", "type": "ordinal"}
           }
