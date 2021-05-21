@@ -20,7 +20,7 @@
       console.log(url);
       var method = ["gt_warp", "ours", "shih", "photo3d", "si_mpi", "synsin"];
       var filter_metric = {"filter": {"field": "metric", "oneOf": ["psnr_masked", "lpips", "ssim"]}}
-      var rename_metric = {"calculate": "{'psnr': 'psnr_unmasked', 'psnr_masked': 'psnr', 'l1': 'l1_unmasked', 'l1_masked': 'l1', 'ssim': 'ssim', 'lpips': 'lpips'}[datum.metric]", "as": "metric_"}
+      var rename_metric = {"calculate": "{'psnr': 'psnr_unmasked', 'psnr_masked': 'psnr', 'l1': 'l1_unmasked', 'l1_masked': 'l1', 'ssim': 'ssim', 'lpips': 'lpips'}[datum.metric]", "as": "Metric"}
       var transform = [
           filter_metric,
           rename_metric,
@@ -73,7 +73,7 @@
         },
         "facet": {
           "row": {"field": "dataset"},
-          "column": {"field": "metric_"}
+          "column": {"field": "Metric"}
         },
         "spec": {
           "mark": {"type": "bar", "tooltip": {"content": "data"}},
@@ -97,7 +97,7 @@
               "as": "count_value"
             }],
             "sort": [{"field": "value", "order": "ascending"}],
-            "groupby": ["dataset", "key", "metric_"],
+            "groupby": ["dataset", "key", "Metric"],
             "ignorePeers": false,
             "frame": [null, 0]
           }
@@ -110,7 +110,7 @@
         },
         "facet": {
           "row": {"field": "dataset"},
-          "column": {"field": "metric_"}
+          "column": {"field": "Metric"}
         },
         "spec": {
           "mark": {"type": "line", "tooltip": {"content": "data"}},
@@ -128,7 +128,7 @@
         "transform": transform,
         "facet": {
           "column": {
-            "field": "metric_",
+            "field": "Metric",
             "type": "nominal",
           },
           "row": {
