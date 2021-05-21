@@ -13,13 +13,15 @@
     <div id="heatmap"></div>
 
     <script type="text/javascript">
+      var url="https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data2.json"
+      var method = ["gt_warp", "ours", "shih", "photo3d", "si_mpi", "synsin"];
       var barSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {
-          "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data2.json"
+          "url": url
         },
         "transform": [
-          {"fold": ["l1", "psnr", "lpips"]}
+          {"fold": method}
         ],
         "resolve":{
           "scale":{
@@ -28,24 +30,24 @@
         },
         "facet": {
           "row": {"field": "dataset"},
-          "column": {"field": "key", "title": "Metric"},
+          "column": {"field": "metric"}
         },
         "spec": {
           "mark": {"type": "bar", "tooltip": {"content": "data"}},
           "encoding": {
             "y": {"field": "value", "type": "quantitative", "title": null, "aggregate": "median"},
-            "x": {"field": "method", "type": "nominal"},
-            "color": {"field": "method", "type": "nominal"}
+            "x": {"field": "key", "type": "nominal", "title": "Method"},
+            "color": {"field": "key", "type": "nominal", "title": "Method"}
           }
         }
       };
       var percentileSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {
-          "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data2.json"
+          "url": url
         },
         "transform": [
-          {"fold": ["l1", "psnr", "lpips"]},
+          {"fold": method},
           {
             "window": [{
               "op": "count",
@@ -53,7 +55,7 @@
               "as": "count_value"
             }],
             "sort": [{"field": "value", "order": "ascending"}],
-            "groupby": ["dataset", "key", "method"],
+            "groupby": ["dataset", "key", "metric"],
             "ignorePeers": false,
             "frame": [null, 0]
           }
@@ -65,60 +67,28 @@
         },
         "facet": {
           "row": {"field": "dataset"},
-          "column": {"field": "key", "title": "Metric"}
+          "column": {"field": "metric"}
         },
         "spec": {
           "mark": {"type": "line", "tooltip": {"content": "data"}},
           "encoding": {
-            "color": {"field": "method", "type": "nominal"},
+            "color": {"field": "key", "type": "nominal", "title": "Method"},
             "y": {"field": "value", "type": "quantitative", "title": null},
             "x": {"field": "count_value", "type": "quantitative", "title": "#samples"}
-          }
-        }
-      };
-      var heatmapSpec = {
-        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data2.json"},
-        "transform": [
-          {"fold": ["l1", "psnr", "lpips"]}
-        ],
-        "facet": {
-          "column": {
-            "field": "key",
-            "type": "nominal",
-            "title": "Metric"
-          },
-          "row": {
-            "field": "dataset",
-            "type": "nominal"
-          }
-        },
-        "resolve":{
-          "scale":{
-            "color":"independent"
-          }
-        },
-        "spec": {
-          "mark": {"type": "rect", "tooltip": {"content": "data"}},
-          "encoding": {
-            "x": {"field": "method", "type":"nominal"},
-            "color": {"field": "value", "type": "quantitative", "scale": {}},
-            "y": {"field": "pair", "type": "ordinal"}
           }
         }
       };
 
       var trellisSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data2.json"},
+        "data": { "url": url },
         "transform": [
-          {"fold": ["l1", "psnr", "lpips"]}
+          {"fold": methods}
         ],
         "facet": {
           "column": {
-            "field": "key",
+            "field": "metric",
             "type": "nominal",
-            "title": "Metric"
           },
           "row": {
             "field": "dataset",
@@ -133,7 +103,7 @@
         "spec": {
           "mark": {"type": "circle", "tooltip": {"content": "data"}},
           "encoding": {
-            "color": {"field": "method", "type":"nominal"},
+            "color": {"field": "key", "type":"nominal"},
             "x": {"field": "value", "type": "quantitative", "scale": {}},
             "y": {"field": "pair", "type": "ordinal"}
           }
