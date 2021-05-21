@@ -36,6 +36,19 @@
           {"fold": method},
           {"calculate": "{'ours_100k': 'MiDaS2', 'ours_f274140538': 'MiDaS0', 'ours_f274140594': 'U-Net', 'ours_f274140638': 'No Features', 'ours_f274140566': 'Hourglass', 'ours_f274140522': 'MiDaS1'}[datum.key]", "as": "method"},
         ]
+      } else if (data.startsWith("feat")) {
+        method = [
+            "ours_100k",
+            "ours_f268032071",
+            "ours_f274151488",
+            "ours_f274151551",
+            "ours_f274163133",
+            "ours_f274163161"
+        ]
+        transform = [
+          {"fold": method},
+          {"calculate": "datum.key", "as": "method"},
+        ]
       }
       var barSpec =  {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
