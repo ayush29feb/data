@@ -76,22 +76,22 @@ def print_latex_table(data, table="eval"):
     elif table == "cnn":
         datasets = ["spaces"]
         methods = [
-            "ours_100k",
             "ours_f274140538",
             "ours_f274140594",
             "ours_f274140638",
             "ours_f274140566",
             "ours_f274140522",
+            "ours_100k",
         ]
     elif table == "feat":
         datasets = ["spaces"]
         methods = [
-            "ours_100k",
-            "ours_f268032071",
-            "ours_f274151488",
-            "ours_f274151551",
             "ours_f274163133",
-            "ours_f274163161"
+            "ours_f274151488",
+            "ours_100k",
+            # "ours_f268032071",
+            # "ours_f274151551",
+            # "ours_f274163161",
         ]
 
     top = {}
@@ -155,11 +155,11 @@ def print_latex_table(data, table="eval"):
         elif method == "ours_f268032071":
             print(method)
         elif method == "ours_f274151488":
-            print(method)
+            print("Learned + depths + dirs.\\ $(\\feat_\\refview, z_\\refview, \\direction_\\refview)$")
         elif method == "ours_f274151551":
             print(method)
         elif method == "ours_f274163133":
-            print(method)
+            print("Learned + 5D coordinates $(\\feat_\\refview, \\pos_\\refview, \\direction_\\refview)$")
         elif method == "ours_f274163161":
             print(method)
 

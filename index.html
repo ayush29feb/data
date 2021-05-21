@@ -38,16 +38,17 @@
         ]
       } else if (data.startsWith("feat")) {
         method = [
+            "ours_f274163133",
+            "ours_f274151488",
             "ours_100k",
             "ours_f268032071",
-            "ours_f274151488",
             "ours_f274151551",
-            "ours_f274163133",
-            "ours_f274163161"
+            "ours_f274163161",
         ]
+
         transform = [
           {"fold": method},
-          {"calculate": "datum.key", "as": "method"},
+          {"calculate": "{'ours_f274163133': 'Learned + 5D coordinates', 'ours_f274151488': 'Learned + depths + dirs', 'ours_100k': 'Learned + depths + dirs + color', 'ours_f268032071': 'ours_f268032071', 'ours_f274151551': 'ours_f274151551', 'ours_f274163161': 'ours_f274163161'}[datum.key]", "as": "method"},
         ]
       }
       var barSpec =  {
