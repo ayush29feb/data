@@ -8,8 +8,11 @@
   </head>
   <body>
     <div id="bar"></div>
+    <hr />
     <div id="percentile"></div>
+    <hr />
     <div id="trellis"></div>
+    <hr />
     <div id="heatmap"></div>
 
     <script type="text/javascript">
@@ -25,7 +28,8 @@
           filter_metric,
           rename_metric,
           {"fold": method},
-          {"calculate": "datum.key", "as": "method"}
+          // {"calculate": "datum.key", "as": "method"},
+          {"calculate": "{'gt_warp': 'Ground Truth Warped', 'si_mpi': 'Single-view MPI [Tucker and Snavely 2020]', 'synsin': 'SynSin [Wiles et al. 2020]', 'photo3d': 'One-Shot 3D Photos [Kopf et al. 2020]', 'shih': '3D Photos Inpainting [Shih et al. 2020]', 'ours': 'Ours'}[datum.key]", "as": "method"}
       ];
 
       if (data.startsWith("cnn")) {
@@ -72,14 +76,14 @@
           }
         },
         "facet": {
-          "row": {"field": "dataset"},
+          "row": {"field": "dataset", "title": "Dataset"},
           "column": {"field": "Metric"}
         },
         "spec": {
           "mark": {"type": "bar", "tooltip": {"content": "data"}},
           "encoding": {
             "y": {"field": "value", "type": "quantitative", "title": null, "aggregate": "median"},
-            "x": {"field": "method", "type": "nominal", "title": null},
+            "x": {"field": "method", "type": "nominal", "title": null, "axis": null},
             "color": {"field": "method", "type": "nominal", "title": "Method"}
           }
         }
@@ -109,7 +113,7 @@
           }
         },
         "facet": {
-          "row": {"field": "dataset"},
+          "row": {"field": "dataset", "title": "Dataset"},
           "column": {"field": "Metric"}
         },
         "spec": {
