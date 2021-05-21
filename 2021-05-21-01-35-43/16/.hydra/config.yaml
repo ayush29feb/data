@@ -1,0 +1,14 @@
+data:
+  root: manifold://x3d_svnerf/tree/eval/${data.dataset}
+  dataset: re10k
+  gt: unpacked.zip
+  gt_warp: gt_warp.zip
+  method: shih.zip
+metrics:
+  l1: {}
+  l1_masked: {}
+  psnr: {}
+  psnr_masked: {}
+  lpips: {}
+  ssim: {}
+debug: false

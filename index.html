@@ -13,9 +13,9 @@
     <div id="heatmap"></div>
 
     <script type="text/javascript">
-      var url="https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data4.json"
+      var url="https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data5.json"
       var method = ["gt_warp", "ours", "shih", "photo3d", "si_mpi", "synsin"];
-      var barSpec = {
+      var barSpec =  {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {
           "url": url
@@ -62,7 +62,8 @@
         ],
         "resolve":{
           "scale":{
-            "y":"independent"
+            "y":"independent",
+            "x": "independent"
           }
         },
         "facet": {
