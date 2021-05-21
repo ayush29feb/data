@@ -7,11 +7,35 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.17.0"></script>
   </head>
   <body>
+    <div id="bar"></div>
     <div id="percentile"></div>
     <div id="trellis"></div>
     <div id="heatmap"></div>
 
     <script type="text/javascript">
+      var barSpec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {
+          "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data.json"
+        },
+        "resolve":{
+          "scale":{
+            "y":"independent"
+          }
+        },
+        "facet": {
+          "row": {"field": "dataset"},
+          "column": {"field": "metric"}
+        },
+        "spec": {
+          "mark": {"type": "bar", "tooltip": {"content": "data"}},
+          "encoding": {
+            "y": {"field": "value", "type": "quantitative", "title": null, "aggregate": "median"},
+            "x": {"field": "method", "type": "nominal"},
+            "color": {"field": "method", "type": "nominal"}
+          }
+        }
+      };
       var percentileSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {
@@ -103,9 +127,10 @@
           }
         }
       };
+      vegaEmbed('#bar', barSpec);
       vegaEmbed('#percentile', percentileSpec);
-      vegaEmbed('#heatmap', heatmapSpec);
       vegaEmbed('#trellis', trellisSpec);
+      // vegaEmbed('#heatmap', heatmapSpec);
     </script>
   </body>
 </html>

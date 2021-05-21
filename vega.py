@@ -16,17 +16,16 @@ def load_metrics(path, agg="median"):
         method = data_json['config']['data']['method'][:-4]
         dataset = data_json['config']['data']['dataset']
         for pair, metrics in data_json['detailed'].items():
-            for m, v in metrics.items():
-                data.append({
-                    "dataset": dataset,
-                    "method": method,
-                    "pair": pair,
-                    "metric": m,
-                    "value": v
-                })
+            sample = {
+                "dataset": dataset,
+                "method": method,
+                "pair": pair,
+            }
+            sample.update(metrics)
+            data.append(sample)
     return data
 
 if __name__ == "__main__":
     data = load_metrics(sys.argv[1], agg="median")
-    with open('vega-metrics/data.json', 'w') as json_file:
+    with open('vega-metrics/data2.json', 'w') as json_file:
         json.dump(data, json_file)
