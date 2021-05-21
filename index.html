@@ -19,10 +19,15 @@
       var url="https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/" + data + ".json"
       console.log(url);
       var method = ["gt_warp", "ours", "shih", "photo3d", "si_mpi", "synsin"];
+      var filter_metric = {"filter": {"field": "metric", "oneOf": ["psnr_masked", "lpips", "ssim"]}}
+      var rename_metric = {"calculate": "{'psnr': 'psnr_unmasked', 'psnr_masked': 'psnr', 'l1': 'l1_unmasked', 'l1_masked': 'l1', 'ssim': 'ssim', 'lpips': 'lpips'}[datum.metric]", "as": "metric_"}
       var transform = [
+          filter_metric,
+          rename_metric,
           {"fold": method},
-          {"calculate": "datum.key", "as": "method"},
+          {"calculate": "datum.key", "as": "method"}
       ];
+
       if (data.startsWith("cnn")) {
         method = [
             "ours_100k",
@@ -33,6 +38,8 @@
             "ours_f274140522",
         ]
         transform = [
+          filter_metric,
+          rename_metric,
           {"fold": method},
           {"calculate": "{'ours_100k': 'MiDaS2', 'ours_f274140538': 'MiDaS0', 'ours_f274140594': 'U-Net', 'ours_f274140638': 'No Features', 'ours_f274140566': 'Hourglass', 'ours_f274140522': 'MiDaS1'}[datum.key]", "as": "method"},
         ]
@@ -47,6 +54,8 @@
         ]
 
         transform = [
+          filter_metric,
+          rename_metric,
           {"fold": method},
           {"calculate": "{'ours_f274163133': 'Learned + 5D coordinates', 'ours_f274151488': 'Learned + depths + dirs', 'ours_100k': 'Learned + depths + dirs + color', 'ours_f268032071': 'ours_f268032071', 'ours_f274151551': 'ours_f274151551', 'ours_f274163161': 'ours_f274163161'}[datum.key]", "as": "method"},
         ]
@@ -64,7 +73,7 @@
         },
         "facet": {
           "row": {"field": "dataset"},
-          "column": {"field": "metric"}
+          "column": {"field": "metric_"}
         },
         "spec": {
           "mark": {"type": "bar", "tooltip": {"content": "data"}},
@@ -88,7 +97,7 @@
               "as": "count_value"
             }],
             "sort": [{"field": "value", "order": "ascending"}],
-            "groupby": ["dataset", "key", "metric"],
+            "groupby": ["dataset", "key", "metric_"],
             "ignorePeers": false,
             "frame": [null, 0]
           }
@@ -101,7 +110,7 @@
         },
         "facet": {
           "row": {"field": "dataset"},
-          "column": {"field": "metric"}
+          "column": {"field": "metric_"}
         },
         "spec": {
           "mark": {"type": "line", "tooltip": {"content": "data"}},
@@ -119,7 +128,7 @@
         "transform": transform,
         "facet": {
           "column": {
-            "field": "metric",
+            "field": "metric_",
             "type": "nominal",
           },
           "row": {
