@@ -1,8 +1,52 @@
 import os
 import json
 import sys
+import numpy as np
 
-def load_metrics(path, agg="median"):
+from vega import valid
+
+"""
+data[method][dataset][m] = [p]
+"""
+
+def load_metrics(path, agg):
+    data = {}
+    for r in os.listdir(path):
+        rpath = os.path.join(path, r) # run path
+        if not os.path.isdir(rpath):
+            continue
+        for j in os.listdir(rpath):
+            if os.path.splitext(j)[1] == ".json":
+                break
+        jpath = os.path.join(rpath, j) # path to metrics json
+        data_json = json.load(open(jpath, "r"))
+        method = data_json['config']['data']['method'][:-4]
+        dataset = data_json['config']['data']['dataset']
+
+        if method not in data:
+            data[method] = {}
+        data[method][dataset] = {}
+        for pair, metrics in data_json['detailed'].items():
+            if not valid(dataset, pair):
+                continue
+            for m, v in metrics.items():
+                if m not in data[method][dataset]:
+                    data[method][dataset][m] = []
+                data[method][dataset][m].append(v)
+
+    for method in data.keys():
+        for dataset in data[method].keys():
+            for m in data[method][dataset].keys():
+                data[method][dataset][m] = np.array(data[method][dataset][m])
+                if agg == "median":
+                    data[method][dataset][m] = np.median(data[method][dataset][m])
+                elif agg == "mean":
+                    data[method][dataset][m] = np.mean(data[method][dataset][m])
+
+    return data
+
+
+def load_metrics_from_summary(path, agg):
     data = {} # method => metrics x datasets
     for r in os.listdir(path):
         rpath = os.path.join(path, r) # run path
@@ -24,10 +68,26 @@ def load_metrics(path, agg="median"):
                 data[method][dataset][m] = v
     return data
 
-def print_latex_table(data):
-    methods = ["si_mpi", "synsin", "photo3d", "shih", "ours"]
-    datasets = ["spaces", "mc", "re10k"]
-    metrics = ["psnr", "ssim", "lpips"]
+def print_latex_table(data, table="eval"):
+    metrics = ["psnr_masked", "ssim", "lpips"]
+    if table == "eval":
+        methods = ["si_mpi", "synsin", "photo3d", "shih", "ours"]
+        datasets = ["spaces", "mc", "re10k"]
+    elif table == "cnn":
+        datasets = ["spaces"]
+        methods = [
+            "ours_100k",
+            "ours_f274140538",
+            "ours_f274140594",
+            "ours_f274140638",
+            "ours_f274140566",
+            "ours_f274140522",
+        ]
+    elif table == "feat":
+        datasets = ["spaces"]
+        methods = [
+            "ours_100k",
+        ]
 
     top = {}
     second = {}
@@ -40,14 +100,14 @@ def print_latex_table(data):
                 value = data[method][dataset][metric]
                 # Seeing for the first time
                 if metric not in top[dataset]:
-                    if metric in ["psnr", "ssim"]:
+                    if metric in ["psnr_masked", "ssim"]:
                         top[dataset][metric] = (sys.float_info.min, None)
                         second[dataset][metric] = (sys.float_info.min, None)
                     else:
                         top[dataset][metric] = (sys.float_info.max, None)
                         second[dataset][metric] = (sys.float_info.max, None)
 
-                if metric in ["psnr", "ssim"]:
+                if metric in ["psnr_masked", "ssim"]:
                     if value > top[dataset][metric][0]:
                         second[dataset][metric] = top[dataset][metric]
                         top[dataset][metric] = (value, method)
@@ -72,6 +132,22 @@ def print_latex_table(data):
             print("3D Photos Inpainting~\cite{shih20203d}")
         elif method == "ours":
             print("\\emph{Ours}")
+        elif method == "ours_100k":
+            if table == "cnn":
+                print("MiDaS2")
+            elif table == "feat":
+                print("Learned + depths + dirs.\\ + color $(\\feat_\\refview, z_\\refview, \\direction_\\refview, \\col_\\refview)$")
+        elif method == "ours_f274140538":
+            print("MiDaS0 (f274140538)")
+        elif method == "ours_f274140594":
+            print("U-Net (f274140594)")
+        elif method == "ours_f274140638":
+            print("No Feature (f274140638)")
+        elif method == "ours_f274140566":
+            print("Hourglass (f274140566)")
+        elif method == "ours_f274140522":
+            print("Midas1 (f274140522)")
+
         s = f"   "
         for dataset in datasets:
             for metric in metrics:
@@ -89,4 +165,4 @@ def print_latex_table(data):
 
 if __name__ == "__main__":
     data = load_metrics(sys.argv[1], agg="median")
-    print_latex_table(data)
+    print_latex_table(data, sys.argv[2])
