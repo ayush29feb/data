@@ -32,7 +32,11 @@ SPACES_VALID_INDICIES = [
  219,220
 ]
 
-def is_valid():
+def valid(dataset, pair):
+    if dataset == "spaces":
+        return pair in [f"pair_{p:06}" for p in SPACES_VALID_INDICIES]
+    elif dataset == "re10k":
+        return pair in [f"pair_{p:06}" for p in RE10K_VALID_INDICIES]
     return True
 
 
@@ -60,6 +64,8 @@ def load_metrics(path, agg="median"):
         method = data_json['config']['data']['method'][:-4]
         dataset = data_json['config']['data']['dataset']
         for pair, metrics in data_json['detailed'].items():
+            if not valid(dataset, pair):
+                continue
             for metric, value in metrics.items():
                 key = (dataset, pair, metric)
                 if key not in data:
@@ -69,9 +75,9 @@ def load_metrics(path, agg="median"):
                         "metric": metric,
                     }
                 data[key][method] = value
-    return data.values()
+    return list(data.values())
 
 if __name__ == "__main__":
     data = load_metrics(sys.argv[1], agg="median")
-    with open('vega-metrics/data3.json', 'w') as json_file:
+    with open('vega-metrics/data4.json', 'w') as json_file:
         json.dump(data, json_file)
