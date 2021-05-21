@@ -25,7 +25,7 @@ def load_metrics(path, agg="median"):
     return data
 
 def print_latex_table(data):
-    methods = ["si_mpi", "synsin", "photo3d", "ours"]
+    methods = ["si_mpi", "synsin", "photo3d", "shih", "ours"]
     datasets = ["spaces", "mc", "re10k"]
     metrics = ["psnr", "ssim", "lpips"]
 
@@ -68,6 +68,8 @@ def print_latex_table(data):
             print("Single-view MPI~\\cite{tucker2020single}")
         elif method == "synsin":
             print("SynSin~\\cite{wiles2020synsin}")
+        elif method == "shih":
+            print("3D Photos Inpainting~\cite{shih20203d}")
         elif method == "ours":
             print("\\emph{Ours}")
         s = f"   "
