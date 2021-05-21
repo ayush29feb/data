@@ -58,5 +58,5 @@ def load_metrics(path, agg="median"):
 
 if __name__ == "__main__":
     data = load_metrics(sys.argv[1], agg="median")
-    with open('vega-metrics/data2.json', 'w') as json_file:
+    with open('vega-metrics/data3.json', 'w') as json_file:
         json.dump(data, json_file)
