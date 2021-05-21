@@ -71,7 +71,7 @@ def load_metrics_from_summary(path, agg):
 def print_latex_table(data, table="eval"):
     metrics = ["psnr_masked", "ssim", "lpips"]
     if table == "eval":
-        methods = ["si_mpi", "synsin", "photo3d", "shih", "ours"]
+        methods = ["si_mpi", "synsin", "photo3d", "shih", "pixelnerf", "ours"]
         datasets = ["spaces", "mc", "re10k"]
     elif table == "cnn":
         datasets = ["spaces"]
@@ -162,6 +162,8 @@ def print_latex_table(data, table="eval"):
             print("Learned + 5D coordinates $(\\feat_\\refview, \\pos_\\refview, \\direction_\\refview)$")
         elif method == "ours_f274163161":
             print(method)
+        elif method == "pixelnerf":
+            print("PixelNeRF~\\cite{yu2020pixelnerf}")
 
         s = f"   "
         for dataset in datasets:
