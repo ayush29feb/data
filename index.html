@@ -21,7 +21,7 @@
 
       var url="https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/" + data + ".json"
       console.log(url);
-      var method = ["ours", "shih", "photo3d", "si_mpi", "synsin"];
+      var method = ["ours", "pixelnerf", "shih", "photo3d", "si_mpi", "synsin"];
       var filter_metric = {"filter": {"field": "metric", "oneOf": ["psnr_masked", "lpips", "ssim"]}}
       var rename_metric = {"calculate": "{'psnr': 'psnr_unmasked', 'psnr_masked': 'PSNR↑', 'l1': 'l1_unmasked', 'l1_masked': 'l1', 'ssim': 'SSIM↑', 'lpips': 'LPIPS↓'}[datum.metric]", "as": "Metric"}
       var transform = [
@@ -29,7 +29,7 @@
           rename_metric,
           {"fold": method},
           // {"calculate": "datum.key", "as": "method"},
-          {"calculate": "{'gt_warp': 'Ground Truth Warped', 'si_mpi': 'Single-view MPI [Tucker and Snavely 2020]', 'synsin': 'SynSin [Wiles et al. 2020]', 'photo3d': 'One-Shot 3D Photos [Kopf et al. 2020]', 'shih': '3D Photos Inpainting [Shih et al. 2020]', 'ours': 'Ours'}[datum.key]", "as": "method"}
+          {"calculate": "{'pixelnerf': 'PixelNeRF [Yu et al. 2020]', 'gt_warp': 'Ground Truth Warped', 'si_mpi': 'Single-view MPI [Tucker and Snavely 2020]', 'synsin': 'SynSin [Wiles et al. 2020]', 'photo3d': 'One-Shot 3D Photos [Kopf et al. 2020]', 'shih': '3D Photos Inpainting [Shih et al. 2020]', 'ours': 'Ours'}[datum.key]", "as": "method"}
       ];
 
       if (data.startsWith("cnn")) {
