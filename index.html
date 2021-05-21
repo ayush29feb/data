@@ -16,8 +16,11 @@
       var barSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {
-          "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data.json"
+          "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data2.json"
         },
+        "transform": [
+          {"fold": ["l1", "psnr", "lpips"]}
+        ],
         "resolve":{
           "scale":{
             "y":"independent"
@@ -25,7 +28,7 @@
         },
         "facet": {
           "row": {"field": "dataset"},
-          "column": {"field": "metric"}
+          "column": {"field": "key", "title": "Metric"},
         },
         "spec": {
           "mark": {"type": "bar", "tooltip": {"content": "data"}},
@@ -39,9 +42,10 @@
       var percentileSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {
-          "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data.json"
+          "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data2.json"
         },
         "transform": [
+          {"fold": ["l1", "psnr", "lpips"]},
           {
             "window": [{
               "op": "count",
@@ -49,7 +53,7 @@
               "as": "count_value"
             }],
             "sort": [{"field": "value", "order": "ascending"}],
-            "groupby": ["dataset", "metric", "method"],
+            "groupby": ["dataset", "key", "method"],
             "ignorePeers": false,
             "frame": [null, 0]
           }
@@ -61,7 +65,7 @@
         },
         "facet": {
           "row": {"field": "dataset"},
-          "column": {"field": "metric"}
+          "column": {"field": "key", "title": "Metric"}
         },
         "spec": {
           "mark": {"type": "line", "tooltip": {"content": "data"}},
@@ -74,11 +78,15 @@
       };
       var heatmapSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data.json"},
+        "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data2.json"},
+        "transform": [
+          {"fold": ["l1", "psnr", "lpips"]}
+        ],
         "facet": {
           "column": {
-            "field": "metric",
-            "type": "nominal"
+            "field": "key",
+            "type": "nominal",
+            "title": "Metric"
           },
           "row": {
             "field": "dataset",
@@ -102,11 +110,15 @@
 
       var trellisSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-        "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data.json"},
+        "data": { "url": "https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data2.json"},
+        "transform": [
+          {"fold": ["l1", "psnr", "lpips"]}
+        ],
         "facet": {
           "column": {
-            "field": "metric",
-            "type": "nominal"
+            "field": "key",
+            "type": "nominal",
+            "title": "Metric"
           },
           "row": {
             "field": "dataset",
