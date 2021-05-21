@@ -13,8 +13,22 @@
     <div id="heatmap"></div>
 
     <script type="text/javascript">
-      var url="https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/data6.json"
+      const urlParams = new URLSearchParams(window.location.search);
+      const data = urlParams.get('data');
+
+      var url="https://raw.githubusercontent.com/ayush29feb/data/master/vega-metrics/" + data + ".json"
+      console.log(url);
       var method = ["gt_warp", "ours", "shih", "photo3d", "si_mpi", "synsin"];
+      if (data.startsWith("cnn")) {
+        method = [
+            "ours_100k",
+            "ours_f274140538",
+            "ours_f274140594",
+            "ours_f274140638",
+            "ours_f274140566",
+            "ours_f274140522",
+        ]
+      }
       var barSpec =  {
         "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
         "data": {
