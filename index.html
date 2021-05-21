@@ -23,7 +23,7 @@
       console.log(url);
       var method = ["gt_warp", "ours", "shih", "photo3d", "si_mpi", "synsin"];
       var filter_metric = {"filter": {"field": "metric", "oneOf": ["psnr_masked", "lpips", "ssim"]}}
-      var rename_metric = {"calculate": "{'psnr': 'psnr_unmasked', 'psnr_masked': 'PSNR', 'l1': 'l1_unmasked', 'l1_masked': 'l1', 'ssim': 'SSIM', 'lpips': 'LPIPS'}[datum.metric]", "as": "Metric"}
+      var rename_metric = {"calculate": "{'psnr': 'psnr_unmasked', 'psnr_masked': 'PSNR↑', 'l1': 'l1_unmasked', 'l1_masked': 'l1', 'ssim': 'SSIM↑', 'lpips': 'LPIPS↓'}[datum.metric]", "as": "Metric"}
       var transform = [
           filter_metric,
           rename_metric,
