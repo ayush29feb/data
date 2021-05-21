@@ -64,8 +64,8 @@ def load_metrics(path, agg="median"):
         method = data_json['config']['data']['method'][:-4]
         dataset = data_json['config']['data']['dataset']
         for pair, metrics in data_json['detailed'].items():
-            # if not valid(dataset, pair):
-            #     continue
+            if not valid(dataset, pair):
+                continue
             for metric, value in metrics.items():
                 key = (dataset, pair, metric)
                 if key not in data:
@@ -79,5 +79,5 @@ def load_metrics(path, agg="median"):
 
 if __name__ == "__main__":
     data = load_metrics(sys.argv[1], agg="median")
-    with open('vega-metrics/data5.json', 'w') as json_file:
+    with open('vega-metrics/data6.json', 'w') as json_file:
         json.dump(data, json_file)
